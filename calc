@@ -1,0 +1,24 @@
+echo
+echo                    INSTRUCTIONS
+echo
+echo The calculator works by prompting the user for an operand, then prompting for an operator
+echo Press enter once selection of the operator/operand has been made and the calculation will be displayed
+echo "Operands are any digit, MR, MC, Clear (C), Off (X)"
+echo "Operators are +, -, *, /, MS, M+, MC, Clear(C), Off(X)"
+echo MS will store the result in memory, M+ will add the result to the value in memory
+echo MC will clear the memory, MR will show the value in memory
+echo "Clear(C) will clear the result but keep the memory"
+echo "Off(X) will exit the program"
+echo
+# initialization
+
+clear=0
+mc=0
+mr=0
+ms=0
+memory=0
+off=0
+operand1=0
+operand2=0
+operator=0
+result=0

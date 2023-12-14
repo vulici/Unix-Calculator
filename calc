@@ -1,4 +1,3 @@
-echo
 echo                    INSTRUCTIONS
 echo
 echo The calculator works by prompting the user for an operand, then prompting for an operator
@@ -22,3 +21,197 @@ operand1=0
 operand2=0
 operator=0
 result=0
+
+
+while [ 1 ]
+#exit program to end loop
+
+do
+    # if result is zero, prompt user
+    if [ $result == 0 ]
+    then
+        while [ 1 ]
+        do
+            read -p "Enter operand: " operand1
+
+            # operand check
+
+            # if operand is MR
+            if [ "$operand1" == "MR" ]
+            then
+                # display value in memory
+                echo "M-> $memory"
+                operand1=$memory
+                break
+            # id operand is MC
+            elif [ "$operand1" == "MC" ]
+            then
+                # clear memory
+                memory=0
+                echo "0 -> M"
+                operand1=0
+            # if operand is C
+            elif [ "$operand1" == "C" ]
+            then
+                echo "  results cleared"
+                result=0
+                clear=1
+                break
+            # if operand is X
+            elif [ "$operand1" == "X" ]
+            then
+                # exit program
+                echo "Good bye."
+                exit 0
+            # regex to check if operand is a digit
+            elif [[ "$operand1" =~ [0-9]+$ ]]
+            then
+                break
+            fi
+        done
+        if [ "$clear" == 1 ]
+        then
+            clear=0
+            # return to beggining of loop and prompt for another operand
+            continue
+        fi
+    fi
+
+    # operator prompt
+    # an easy way to make sure the correct operators are being used
+    while [ 1 ]
+    do
+        read -p "Enter operator: " operator
+        # check if operator is MS
+        if [ "$operator" == "MS" ]
+        then
+            # store result in memory
+            memory=$result
+            echo "$memory -> M"
+            operator=0
+        elif [ "$operator" == "M+" ]
+        then
+            # add result to value in memory
+            echo "$result + $memory = $(("$memory" + "$result")) -> M"
+            memory=$(("$memory" + "$result"))
+            operator=0
+        elif [ "$operator" == "MC" ]
+        then
+            # clear memory
+            memory=0
+            echo "0 -> M"
+            operator=0
+        elif [ "$operator" == "C" ]
+        then
+            echo "      results cleared"
+            result=0
+            clear=1
+            break
+        elif [ "$operator" == "X" ]
+        then
+            echo "Good bye."
+            # exit program
+            exit 0
+        elif [ "$operator" == "+" ] || [ "$operator" == "-" ] || [ "$operator" == "*" ] || [ "$operator" == "/" ]
+        then
+            break
+        else
+            # error message for invalid operator
+            echo "Sorry, "$operator", is not a valid operator. Please re-enter operator."
+            operator=0
+        fi
+    done
+    if [ "$clear" == 1 ]
+    then
+        clear=0
+        continue
+    fi
+
+    # operand prompt
+    # organizes the operands entry prompts in an easy to follow ladder
+    # i found this was the easiest way to organize the code
+    while [ 1 ]
+    do
+        read -p "Enter operand: " operand2
+
+        # operand check
+        # checks if operand is MR
+        if [ "$operand2" == "MR" ]
+        then
+            # memory displayed
+            echo "M-> $memory"
+            operand2=$memory
+            break
+        # checks id operand is MC
+        elif [ "$operand2" == "MC" ]
+        then
+            # clear memory
+            memory=0
+            echo "0 -> M"
+            operand2=0
+        # checks if operand is MC
+        elif [ "$operand2" == "C" ]
+        then
+            # clear results
+            result=0
+            echo "      results cleared"
+            clear=1
+            break
+        # checks if operand is X
+        elif [ "$operand2" == "X" ]
+        then
+            echo "Good bye."
+            exit 0
+        # regex to check if operand is a digit
+        elif [[ "$operand2" =~ [0-9]+$ ]]
+        then
+            # valid operand, exit loop
+            break
+        else
+            # error message fr invalid operand
+            echo "Sorry, "$operand2", is not a valid operand, Please re-enter operand"
+            operand2=0
+        fi
+    done
+    if [ "$clear" == 1 ]
+    then
+        clear=0
+        continue
+    fi
+
+    # gives  the results one would expect of each operator (ie + will add etc)
+    # an easy way to organize the various operators and their functions
+    if [ "$operator" == "+" ]
+    then
+        # add operands
+        result=$(("$operand1" + "$operand2"))
+        echo ""$operand1" + "$operand2" = $result"
+    elif [ "$operator" == "-" ]
+    then
+        # subtract operands
+        result=$(("$operand1" - "$operand2"))
+        echo ""$operand1" - "$operand2" = $result"
+    elif [ "$operator" == "*" ]
+    then
+        # multiply operands
+        result=$(("$operand1" * "$operand2"))
+        echo ""$operand1" * "$operand2" = $result"
+    elif [ "$operator" == "/" ]
+    then
+        # divide operands
+        while [ "$operand2" == 0 ]
+        do
+            echo "Can't divide by zero. Please re-enter divisor."
+            echo "Enter operand:"
+            read operand2
+        done
+        result=$(("$operand1" / "$operand2"))
+        echo ""$operand1" / "$operand2" = $result"
+    else
+        # invalid operator
+        echo "Sorry, "$operator", is not a valid operator. Please re-enter operator"
+        operator=0
+    fi
+    operand1=$result
+
+done
